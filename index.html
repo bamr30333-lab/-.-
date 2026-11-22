@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إلى ميرو ♥</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #1a0b14;
+      --bg-2: #361328;
+      --card: rgba(255, 248, 251, 0.08);
+      --card-border: rgba(255, 194, 218, 0.24);
+      --rose: #ff5d8f;
+      --rose-soft: #ff9ebb;
+      --gold: #ffd180;
+      --text: #fff7fa;
+      --muted: #e8c5d3;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--bg-2), var(--bg-1) 72%);
+      color: var(--text);
+      overflow-x: hidden;
+      position: relative;
+      padding: 28px 16px 60px;
+    }
+
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .floating-heart {
+      position: absolute;
+      bottom: -40px;
+      color: rgba(255, 117, 160, 0.25);
+      animation: floatUp linear infinite;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      15% {
+        opacity: 0.85;
+      }
+      85% {
+        opacity: 0.65;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(25deg) scale(1.15);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 24px 18px 28px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255, 93, 143, 0.18);
+      border: 1px solid rgba(255, 158, 187, 0.35);
+      color: var(--rose-soft);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .photo-frame-wrap {
+      position: relative;
+      width: 190px;
+      height: 190px;
+      margin: 0 auto 18px;
+    }
+
+    .photo-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      padding: 5px;
+      background: linear-gradient(135deg, var(--gold), var(--rose), #ff8fab);
+      box-shadow: 0 0 35px rgba(255, 93, 143, 0.45);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-ring:hover {
+      transform: scale(1.03);
+    }
+
+    .photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #28101f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .photo-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .photo-placeholder {
+      text-align: center;
+      padding: 12px;
+      color: var(--rose-soft);
+    }
+
+    .photo-placeholder .cam {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .photo-placeholder span {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      display: block;
+    }
+
+    .change-photo-btn {
+      position: absolute;
+      bottom: 4px;
+      left: 4px;
+      background: linear-gradient(135deg, var(--rose), #d9386a);
+      color: #fff;
+      border: 2px solid #28101f;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    }
+
+    #photoInput {
+      display: none;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 800;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, #fff, var(--gold), var(--rose-soft));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 20px;
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 18px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--rose), #e03e71);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(255, 93, 143, 0.35);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .section {
+      margin-top: 22px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 22px;
+      backdrop-filter: blur(12px);
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .letter-box {
+      background: rgba(18, 7, 14, 0.45);
+      border-right: 4px solid var(--rose);
+      border-radius: 16px;
+      padding: 18px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      font-size: 1.12rem;
+      line-height: 1.9;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+
+    .editor-area {
+      display: none;
+      margin-top: 12px;
+    }
+
+    .editor-area.active {
+      display: block;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 115px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 194, 218, 0.35);
+      background: rgba(20, 7, 15, 0.75);
+      color: #fff;
+      padding: 12px 14px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1rem;
+      line-height: 1.7;
+      resize: vertical;
+      margin-bottom: 10px;
+    }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+      gap: 12px;
+    }
+
+    .reason-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 194, 218, 0.2);
+      border-radius: 18px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reason-card:hover {
+      background: rgba(255, 93, 143, 0.14);
+      border-color: var(--rose-soft);
+      transform: translateY(-3px);
+    }
+
+    .reason-card .icon {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    .reason-card .label {
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--rose-soft);
+    }
+
+    .reason-card .detail {
+      display: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #fff;
+    }
+
+    .reason-card.revealed .icon,
+    .reason-card.revealed .label {
+      display: none;
+    }
+
+    .reason-card.revealed .detail {
+      display: block;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-bg" id="heartsBg"></div>
+
+  <main class="container">
+    <section class="hero">
+      <div class="badge">✨ صفحة خاصة جداً لـ ميرو ✨</div>
+
+      <div class="photo-frame-wrap">
+        <div class="photo-ring" id="photoRing" title="اضغط لإضافة صورة ميرو">
+          <div class="photo-inner">
+            <img id="miroPhoto" alt="صورة ميرو" />
+            <div class="photo-placeholder" id="photoPlaceholder">
+              <span class="cam">📷</span>
+              <span>اضغط لإضافة صورة ميرو</span>
+            </div>
+          </div>
+        </div>
+        <button class="change-photo-btn" id="changePhotoBtn" type="button">تغيير الصورة</button>
+        <input type="file" id="photoInput" accept="image/*" />
+      </div>
+
+      <h1>يا ميرو يا أغلى الناس</h1>
+      <p class="subtitle">مكان صغير معمول بحب عشان يفكرك دايماً إنك في القلب</p>
+
+      <div class="top-actions">
+        <button class="btn btn-primary" id="surpriseBtn" type="button">💖 مفاجأة لـ ميرو</button>
+        <button class="btn btn-secondary" id="musicBtn" type="button">🎵 تشغيل موسيقى هادئة</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">💌 كلام من القلب لـ ميرو</div>
+      <div class="letter-box" id="letterBox"></div>
+
+      <div class="top-actions">
+        <button class="btn btn-primary" id="nextMsgBtn" type="button">رسالة جديدة ✨</button>
+        <button class="btn btn-secondary" id="editMsgBtn" type="button">اكتب رسالتك الخاصة ✍️</button>
+      </div>
+
+      <div class="editor-area" id="editorArea">
+        <textarea id="customMsgInput" placeholder="اكتب هنا اللي حابب تقوله لـ ميرو..."></textarea>
+        <div class="top-actions">
+          <button class="btn btn-primary" id="saveMsgBtn" type="button">حفظ الرسالة</button>
+          <button class="btn btn-secondary" id="cancelMsgBtn" type="button">إلغاء</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">🌸 ليه بحبك يا ميرو؟ (اضغط على كل كارت)</div>
+      <div class="reasons-grid" id="reasonsGrid"></div>
+    </section>
+
+    <p class="footer-note">صُنِعَ بحب خاص لـ ميرو ♥</p>
+  </main>
+
+  <script>
+    const loveMessages = [
+      "يا ميرو، وجودك في حياتي بيخلي كل حاجة صعبة تهون، وضحكتك لوحدها قادرة تصلّح يومي كله.",
+      "أجمل حاجة حصلتلي إن قلبي اختارك، ومعاكِ بحس إن الدنيا أهدى وأحلى بكتير.",
+      "مهما عدّى الوقت، هتفضلي أكتر حد يوحشني وأنا معاكِ، وأحلى حاجة بفكر فيها قبل ما أنام.",
+      "بحبك يا ميرو بكلام بسيط وطالع من القلب؛ إنتِ الأمان والفرحة اللي بتنوّر أيامي."
+    ];
+
+    const reasonsData = [
+      { icon: "😊", title: "ضحكتك", detail: "ضحكتك بتخلي قلبي يرتاح من أول ثانية." },
+      { icon: "🤍", title: "قلبك الطيب", detail: "طيبتك وحنيتك حاجة نادرة ومفيش زيها." },
+      { icon: "✨", title: "وجودك", detail: "وجودك جنبي بيدي لكل يوم معنى أحلى." },
+      { icon: "🌙", title: "أماني", detail: "معاكِ بحس إني في بيتي وفي أمان دايماً." }
+    ];
+
+    let currentMsgIndex = 0;
+    const letterBox = document.getElementById("letterBox");
+    const editorArea = document.getElementById("editorArea");
+    const customMsgInput = document.getElementById("customMsgInput");
+
+    function renderMessage(text) {
+      letterBox.textContent = text;
+    }
+
+    const savedCustom = localStorage.getItem("miro_custom_love_msg");
+    if (savedCustom && savedCustom.trim()) {
+      renderMessage(savedCustom);
+    } else {
+      renderMessage(loveMessages[0]);
+    }
+
+    document.getElementById("nextMsgBtn").addEventListener("click", () => {
+      localStorage.removeItem("miro_custom_love_msg");
+      currentMsgIndex = (currentMsgIndex + 1) % loveMessages.length;
+      renderMessage(loveMessages[currentMsgIndex]);
+    });
+
+    document.getElementById("editMsgBtn").addEventListener("click", () => {
+      editorArea.classList.toggle("active");
+      customMsgInput.value = letterBox.textContent;
+      customMsgInput.focus();
+    });
+
+    document.getElementById("cancelMsgBtn").addEventListener("click", () => {
+      editorArea.classList.remove("active");
+    });
+
+    document.getElementById("saveMsgBtn").addEventListener("click", () => {
+      const val = customMsgInput.value.trim();
+      if (!val) return;
+      localStorage.setItem("miro_custom_love_msg", val);
+      renderMessage(val);
+      editorArea.classList.remove("active");
+      spawnHearts(18);
+    });
+
+    const photoInput = document.getElementById("photoInput");
+    const miroPhoto = document.getElementById("miroPhoto");
+    const photoPlaceholder = document.getElementById("photoPlaceholder");
+
+    function applyPhoto(dataUrl) {
+      if (!dataUrl) return;
+      miroPhoto.src = dataUrl;
+      miroPhoto.style.display = "block";
+      photoPlaceholder.style.display = "none";
+    }
+
+    const savedPhoto = localStorage.getItem("miro_love_photo");
+    if (savedPhoto) {
+      applyPhoto(savedPhoto);
+    }
+
+    function openPhotoPicker() {
+      photoInput.click();
+    }
+
+    document.getElementById("photoRing").addEventListener("click", openPhotoPicker);
+    document.getElementById("changePhotoBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      openPhotoPicker();
+    });
+
+    photoInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          localStorage.setItem("miro_love_photo", reader.result);
+        } catch (err) {}
+        applyPhoto(reader.result);
+        spawnHearts(14);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    const reasonsGrid = document.getElementById("reasonsGrid");
+    reasonsData.forEach((item) => {
+      const card = document.createElement("div");
+      card.className = "reason-card";
+      card.innerHTML = `
+        <div class="icon">${item.icon}</div>
+        <div class="label">${item.title}</div>
+        <div class="detail">${item.detail}</div>
+      `;
+      card.addEventListener("click", () => {
+        card.classList.toggle("revealed");
+        spawnHearts(6);
+      });
+      reasonsGrid.appendChild(card);
+    });
+
+    const heartsBg = document.getElementById("heartsBg");
+    const heartSymbols = ["♥", "💖", "💕", "💗"];
+
+    function spawnHearts(count = 1) {
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement("span");
+        el.className = "floating-heart";
+        el.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+        el.style.left = Math.random() * 100 + "%";
+        el.style.fontSize = (16 + Math.random() * 20) + "px";
+        const duration = 5 + Math.random() * 5;
+        el.style.animationDuration = duration + "s";
+        el.style.animationDelay = (Math.random() * 0.6) + "s";
+        heartsBg.appendChild(el);
+        setTimeout(() => el.remove(), (duration + 1) * 1000);
+      }
+    }
+
+    setInterval(() => spawnHearts(1), 1100);
+    spawnHearts(8);
+
+    document.getElementById("surpriseBtn").addEventListener("click", () => {
+      spawnHearts(30);
+    });
+
+    let audioCtx = null;
+    let musicInterval = null;
+    let isPlaying = false;
+    const musicBtn = document.getElementById("musicBtn");
+    const notes = [261.63, 329.63, 392.00, 493.88, 523.25, 392.00, 329.63, 293.66];
+    let noteIdx = 0;
+
+    function playSoftTone(freq) {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = freq;
+
+      const now = audioCtx.currentTime;
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.04, now + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.1);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 1.15);
+    }
+
+    musicBtn.addEventListener("click", () => {
+      if (!isPlaying) {
+        isPlaying = true;
+        musicBtn.textContent = "⏸️ إيقاف الموسيقى";
+        playSoftTone(notes[noteIdx % notes.length]);
+        noteIdx++;
+        musicInterval = setInterval(() => {
+          playSoftTone(notes[noteIdx % notes.length]);
+          noteIdx++;
+        }, 900);
+      } else {
+        isPlaying = false;
+        musicBtn.textContent = "🎵 تشغيل موسيقى هادئة";
+        clearInterval(musicInterval);
+      }
+    });
+  </script>
+</body>
+</html>
